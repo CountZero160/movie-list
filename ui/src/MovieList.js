@@ -1,20 +1,21 @@
-import React from "react";
-
-const movies = [
-  { title: "Mean Girls" },
-  { title: "Hackers" },
-  { title: "The Grey" },
-  { title: "Sunshine" },
-  { title: "Ex Machina" },
-];
+import React, { useEffect, useState } from "react";
 
 function MovieList() {
+  const [movieList, setMovieList] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/movies/`)
+      .then((response) => response.json())
+      .then((data) => setMovieList(data))
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <div>
       <h3>Movie List</h3>
       <ul>
-        {movies.map(function (movie) {
-          return <li>{movie.title}</li>;
+        {movieList.map(function (movie) {
+          return <li key={movie.id}>{movie.title}</li>;
         })}
       </ul>
     </div>
