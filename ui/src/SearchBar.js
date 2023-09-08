@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from "react";
 
 export const SearchBar = () => {
-  const [input, setInput] = useState("");
+  const [movies, setMovies] = useState([]);
   const [filteredResults, setFilteredResults] = useState([]);
-  const [movieList, setMovieList] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
     fetch(`http://localhost:8080/movies/`)
       .then((response) => response.json())
-      .then((data) => setMovieList(data))
+      .then((data) => setMovies(data))
       .catch((error) => console.error(error));
   }, []);
 
   const searchItems = (searchValue) => {
-    setInput(searchValue);
-    if (input !== "") {
-      const filteredData = movieList.filter((item) => {
-        return Object.values(item).join("").toLowerCase();
+    setSearchInput(searchValue);
+    if (searchInput !== "") {
+      const filteredData = movies.filter((item) => {
+        return Object.values(item)
+          .join("")
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
       });
       setFilteredResults(filteredData);
     } else {
-      setFilteredResults(movieList);
+      setFilteredResults(movies);
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
+    <div>
       <input
         type="text"
         placeholder="Movie Search"
@@ -38,5 +41,3 @@ export const SearchBar = () => {
     </div>
   );
 };
-
-export default SearchBar;
